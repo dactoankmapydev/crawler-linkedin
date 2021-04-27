@@ -110,7 +110,6 @@ with open('output.csv', 'w',  newline = '') as file_output:
         info_div = page_source.find('div',{'class':'flex-1 mr5 pv-top-card__list-container'})
         info_div2 = page_source.find('ul',{'class':'pv-top-card--experience-list'})
         try:
-            # re.findall(r'(Back End Developer:?) (.*)', title)[0][0]
             title = info_div.find('h2', class_='mt1 t-18 t-black t-normal break-words').get_text().strip()
             if search_query in title:
                 name = info_div.find('li', class_='inline t-24 t-black t-normal break-words').get_text().strip() #Remove unnecessary characters 
