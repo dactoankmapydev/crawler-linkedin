@@ -1,1 +1,3 @@
-'site:linkedin.com/in/ AND "python developer" AND "Ha noi"'
+Python Developer
+Ha noi
+10
