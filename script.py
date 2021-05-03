@@ -1,6 +1,5 @@
 # Nhập thư viện và gói cho dự án
 import csv
-import parameters
 from parsel import Selector
 from bs4 import BeautifulSoup
 from time import sleep
