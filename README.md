@@ -2,7 +2,7 @@
 
 Làm theo các bước dưới đây:
 
- 1. Cài đặt Chrome/Firefox WebDriver bằng cách nhấp vào [liên kết] này (https://nguyenvanhieu.vn/cai-dat-moi-truong-selenium-voi-python/).
+ 1. Cài đặt Chrome/Firefox WebDriver bằng cách nhấp vào [liên kết](https://nguyenvanhieu.vn/cai-dat-moi-truong-selenium-voi-python/).
  
  2. Cài đặt python3 và nâng cấp pip3
  3. Cài đặt tất cả các gói qua pip3:
