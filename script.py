@@ -80,6 +80,13 @@ def GetURL():
 URLs_all_page = []
 for page in range(int(page_number)):
     URLs_one_page = GetURL()
+    if len(URLs_one_page) == 0:
+        print('''Xin hãy đảm bảo tất cả từ được đánh vần chính xác.
+                Hãy thử các từ khóa khác nhau.
+                Thử những từ khóa thông thường hơn.
+                Hãy thử ít từ khóa hơn
+        ''')
+        break
     sleep(3)
     driver.execute_script('window.scrollTo(0, document.body.scrollHeight);') #scroll to the end of the page
     sleep(3)
