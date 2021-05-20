@@ -98,30 +98,35 @@ for page in range(int(page_number)):
 
 # thu thập dữ liệu của 1 hồ sơ Linkedin và ghi dữ liệu vào tệp .CSV
 with open('profile_output.csv', 'w',  newline = '') as file_output:
-    headers = ['Name', 'Job Title', 'Location', 'Company', 'Link']
+    headers = ['Name', 'Job Title', 'Location', 'College', 'Company', 'Link']
     writer = csv.DictWriter(file_output, delimiter=',', lineterminator='\n',fieldnames=headers)
     writer.writeheader()
     for linkedin_URL in URLs_all_page:
         driver.get(linkedin_URL)
         print('- Truy cập hồ sơ: ', linkedin_URL)
         sleep(3)
+        sel = Selector(text=driver.page_source)
         page_source = BeautifulSoup(driver.page_source, "html.parser")
         info_div = page_source.find('div',{'class':'flex-1 mr5 pv-top-card__list-container'})
         info_company = page_source.find('ul',{'class':'pv-top-card--experience-list'})
+        info_college = page_source.find('div',{'class':'pv-entity__degree-info'})
         try:
             name = info_div.find('li', class_='inline t-24 t-black t-normal break-words').get_text().strip() #Remove unnecessary characters 
-            print('--- Tên hồ sơ là: ', name)
+            print('--- Tên ứng viên: ', name)
 
             location = info_div.find('li', class_='t-16 t-black t-normal inline-block').get_text().strip() #Remove unnecessary characters 
-            print('--- Vị trí hồ sơ là: ', location)
+            print('--- Khu vực làm việc: ', location)
 
             title = info_div.find('h2', class_='mt1 t-18 t-black t-normal break-words').get_text().strip()
-            print('--- Tiêu đề hồ sơ là: ', title)
+            print('--- Tiêu đề hồ sơ: ', title)
 
             company = info_company.find('span', class_='text-align-left ml2 t-14 t-black t-bold full-width lt-line-clamp lt-line-clamp--multi-line ember-view').get_text().strip()
-            print('--- Hồ sơ công ty là: ', company)
+            print('--- Công ty  hiện tại: ', company)
 
-            writer.writerow({headers[0]:name, headers[1]:title, headers[2]:location, headers[3]:company, headers[4]:linkedin_URL})
+            college = info_college.find('h3', class_='pv-entity__school-name t-16 t-black t-bold').get_text().strip()
+            print('--- Học vấn: ', college)               
+
+            writer.writerow({headers[0]:name, headers[1]:title, headers[2]:location, headers[3]:college, headers[4]:company, headers[5]:linkedin_URL})
             print('\n')
         except:
             pass
