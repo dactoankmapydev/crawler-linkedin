@@ -108,8 +108,8 @@ with open('profile_output.csv', 'w',  newline = '') as file_output:
         page_source = BeautifulSoup(driver.page_source, "html.parser")
         info = page_source.find('div',{'class':'display-flex justify-space-between pt2'})
         info_company = page_source.find('h2',{'class':'text-heading-small align-self-center flex-1'})
-        # info_exp = page_source.find('ul', {'class':'pv-profile-section__section-info section-info pv-profile-section__section-info--has-no-more'})
         info_college = page_source.find('div',{'class':'pv-entity__degree-info'})
+        info_exp = page_source.find('div', {'class':'pv-entity__summary-info pv-entity__summary-info--background-section'})
         try:
             name = info.find('h1', class_='text-heading-xlarge inline t-24 v-align-middle break-words').get_text().strip()
             print('--- Tên ứng viên: ', name)
@@ -124,7 +124,16 @@ with open('profile_output.csv', 'w',  newline = '') as file_output:
             print('--- Công ty  hiện tại: ', company)
 
             college = info_college.find('h3', class_='pv-entity__school-name t-16 t-black t-bold').get_text().strip()
-            print('--- Học vấn: ', college)               
+            print('--- Học vấn: ', college)
+
+            title_company_exp = info_exp.find('h3', class_='t-16 t-black t-bold').get_text().strip()
+            print('--- title_company_exp: ', title_company_exp)
+
+            company_exp = info_exp.find('p', class_='pv-entity__secondary-title t-14 t-black t-normal').get_text().strip()
+            print('--- company_exp: ', company_exp)
+
+            time_company_exp = info_exp.find('span', class_='pv-entity__bullet-item-v2').get_text().strip()
+            print('--- time_company_exp: ', time_company_exp)             
 
             writer.writerow({headers[0]:name, headers[1]:title, headers[2]:location, headers[3]:college, headers[4]:company, headers[5]:linkedin_URL})
             print('\n')
