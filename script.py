@@ -88,7 +88,7 @@ for page in range(int(page_number)):
         ''')
         break
     sleep(3)
-    driver.execute_script('window.scrollTo(0, document.body.scrollHeight);') #scroll to the end of the page
+    driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
     sleep(3)
     next_button = driver.find_element_by_xpath('//*[@id="pnnext"]')
     sleep(3)
@@ -105,22 +105,22 @@ with open('profile_output.csv', 'w',  newline = '') as file_output:
         driver.get(linkedin_URL)
         print('- Truy cập hồ sơ: ', linkedin_URL)
         sleep(3)
-        sel = Selector(text=driver.page_source)
         page_source = BeautifulSoup(driver.page_source, "html.parser")
-        info_div = page_source.find('div',{'class':'flex-1 mr5 pv-top-card__list-container'})
-        info_company = page_source.find('ul',{'class':'pv-top-card--experience-list'})
+        info = page_source.find('div',{'class':'display-flex justify-space-between pt2'})
+        info_company = page_source.find('h2',{'class':'text-heading-small align-self-center flex-1'})
+        # info_exp = page_source.find('ul', {'class':'pv-profile-section__section-info section-info pv-profile-section__section-info--has-no-more'})
         info_college = page_source.find('div',{'class':'pv-entity__degree-info'})
         try:
-            name = info_div.find('li', class_='inline t-24 t-black t-normal break-words').get_text().strip() #Remove unnecessary characters 
+            name = info.find('h1', class_='text-heading-xlarge inline t-24 v-align-middle break-words').get_text().strip()
             print('--- Tên ứng viên: ', name)
 
-            location = info_div.find('li', class_='t-16 t-black t-normal inline-block').get_text().strip() #Remove unnecessary characters 
+            location = info.find('span', class_='text-body-small inline t-black--light break-words').get_text().strip()
             print('--- Khu vực làm việc: ', location)
 
-            title = info_div.find('h2', class_='mt1 t-18 t-black t-normal break-words').get_text().strip()
+            title = info.find('div', class_='text-body-medium break-words').get_text().strip()
             print('--- Tiêu đề hồ sơ: ', title)
 
-            company = info_company.find('span', class_='text-align-left ml2 t-14 t-black t-bold full-width lt-line-clamp lt-line-clamp--multi-line ember-view').get_text().strip()
+            company = info_company.find('div', class_='inline-show-more-text inline-show-more-text--is-collapsed inline-show-more-text--is-collapsed-with-line-clamp').get_text().strip()
             print('--- Công ty  hiện tại: ', company)
 
             college = info_college.find('h3', class_='pv-entity__school-name t-16 t-black t-bold').get_text().strip()
