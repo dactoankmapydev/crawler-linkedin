@@ -98,7 +98,7 @@ for page in range(int(page_number)):
 
 # thu thập dữ liệu của 1 hồ sơ Linkedin và ghi dữ liệu vào tệp .CSV
 with open('profile_output.csv', 'w',  newline = '') as file_output:
-    headers = ['Name', 'Job Title', 'Location', 'College', 'Company', 'Link']
+    headers = ['Tên ứng viên', 'Học vấn', 'Công việc hiện tại', 'Công ty hiện tại', 'Thời gian làm việc', 'Khu vực làm việc', 'Liên kết tài khoản']
     writer = csv.DictWriter(file_output, delimiter=',', lineterminator='\n',fieldnames=headers)
     writer.writeheader()
     for linkedin_URL in URLs_all_page:
@@ -106,39 +106,51 @@ with open('profile_output.csv', 'w',  newline = '') as file_output:
         print('- Truy cập hồ sơ: ', linkedin_URL)
         sleep(3)
         page_source = BeautifulSoup(driver.page_source, "html.parser")
+
         info = page_source.find('div',{'class':'display-flex justify-space-between pt2'})
+
         info_company = page_source.find('h2',{'class':'text-heading-small align-self-center flex-1'})
+
         info_college = page_source.find('div',{'class':'pv-entity__degree-info'})
-        info_exp = page_source.find('div', {'class':'pv-entity__summary-info pv-entity__summary-info--background-section'})
+
+        info_experience = page_source.find('div', {'class':'pv-entity__summary-info pv-entity__summary-info--background-section'})
+
         try:
-            name = info.find('h1', class_='text-heading-xlarge inline t-24 v-align-middle break-words').get_text().strip()
-            print('--- Tên ứng viên: ', name)
-
-            location = info.find('span', class_='text-body-small inline t-black--light break-words').get_text().strip()
-            print('--- Khu vực làm việc: ', location)
-
-            title = info.find('div', class_='text-body-medium break-words').get_text().strip()
-            print('--- Tiêu đề hồ sơ: ', title)
-
-            company = info_company.find('div', class_='inline-show-more-text inline-show-more-text--is-collapsed inline-show-more-text--is-collapsed-with-line-clamp').get_text().strip()
-            print('--- Công ty  hiện tại: ', company)
+            name_people = info.find('h1', class_='text-heading-xlarge inline t-24 v-align-middle break-words').get_text().strip()
+            print('--- Tên ứng viên: ', name_people)
 
             college = info_college.find('h3', class_='pv-entity__school-name t-16 t-black t-bold').get_text().strip()
             print('--- Học vấn: ', college)
 
-            title_company_exp = info_exp.find('h3', class_='t-16 t-black t-bold').get_text().strip()
-            print('--- title_company_exp: ', title_company_exp)
+            position = info_experience.find('h3', class_='t-16 t-black t-bold').get_text().strip()
+            print('--- Chức vụ: ', position)
 
-            company_exp = info_exp.find('p', class_='pv-entity__secondary-title t-14 t-black t-normal').get_text().strip()
-            print('--- company_exp: ', company_exp)
+            # company = info_company.find('div', class_='inline-show-more-text inline-show-more-text--is-collapsed inline-show-more-text--is-collapsed-with-line-clamp').get_text().strip()
+            # print('--- Công ty hiện tại: ', company)
 
-            time_company_exp = info_exp.find('span', class_='pv-entity__bullet-item-v2').get_text().strip()
-            print('--- time_company_exp: ', time_company_exp)             
+            # experience
+            company = info_experience.find('p', class_='pv-entity__secondary-title t-14 t-black t-normal').get_text().strip()
+            print('--- Công ty hiện tại: ', company)
 
-            writer.writerow({headers[0]:name, headers[1]:title, headers[2]:location, headers[3]:college, headers[4]:company, headers[5]:linkedin_URL})
+            time_work_at_company = info_experience.find('span', class_='pv-entity__bullet-item-v2').get_text().strip()
+            print('--- Thời gian làm việc: ', time_work_at_company)   
+
+            location = info.find('span', class_='text-body-small inline t-black--light break-words').get_text().strip()
+            print('--- Khu vực làm việc: ', location)          
+
+            writer.writerow({
+                    headers[0]:name_people,
+                    headers[1]:college,
+                    headers[2]:position,
+                    headers[3]:company,
+                    headers[4]:time_work_at_company,
+                    headers[5]:location,
+                    headers[6]:linkedin_URL
+                })
+
             print('\n')
         except:
             pass
 
 # nhiệm vụ hoàn thành
-print('nhiệm vụ hoàn thành!')
+print('Nhiệm vụ hoàn thành!')
