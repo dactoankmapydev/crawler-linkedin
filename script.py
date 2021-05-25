@@ -1,9 +1,12 @@
 # Nhập thư viện và gói cho dự án
 import csv
+import setup_es
 from bs4 import BeautifulSoup
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+
+es = setup_es.connect_elasticsearch()
 
 # Mở Firefox và truy cập trang đăng nhập Linkedin
 driver = webdriver.Firefox()
@@ -136,7 +139,20 @@ with open('profile_output.csv', 'w',  newline = '') as file_output:
             print('--- Thời gian làm việc: ', time_work_at_company)   
 
             location = info.find('span', class_='text-body-small inline t-black--light break-words').get_text().strip()
-            print('--- Khu vực làm việc: ', location)          
+            print('--- Khu vực làm việc: ', location)
+
+            infomation  = {
+                "name_people": name_people,
+                "college": college,
+                "position": position,
+                "company": company,
+                "time_work_at_company": time_work_at_company,
+                "location": location,
+                "link": linkedin_URL
+            }
+            if es is not None:
+                if setup_es.create_index(es, "infomation-profile"):
+                    setup_es.store_record(es, "infomation-profile", infomation)     
 
             writer.writerow({
                     headers[0]:name_people,
